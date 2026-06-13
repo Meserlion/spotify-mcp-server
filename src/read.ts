@@ -75,7 +75,11 @@ const searchSpotify: tool<{
       } else if (type === 'artist' && results.artists) {
         formattedResults = results.artists.items
           .map((artist, i) => {
-            return `${i + 1}. ${artist.name} - ID: ${artist.id}`;
+            const genres =
+              artist.genres && artist.genres.length > 0
+                ? ` - Genres: ${artist.genres.join(', ')}`
+                : '';
+            return `${i + 1}. ${artist.name}${genres} - ID: ${artist.id}`;
           })
           .join('\n');
       } else if (type === 'playlist' && results.playlists) {
