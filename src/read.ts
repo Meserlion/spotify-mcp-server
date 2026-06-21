@@ -1,12 +1,7 @@
 import type { MaxInt } from '@spotify/web-api-ts-sdk';
 import { z } from 'zod';
 import type { SpotifyHandlerExtra, SpotifyTrack, tool } from './types.js';
-import {
-  createSpotifyApi,
-  formatDuration,
-  handleSpotifyRequest,
-  loadSpotifyConfig,
-} from './utils.js';
+import { formatDuration, handleSpotifyRequest } from './utils.js';
 
 function isTrack(item: any): item is SpotifyTrack {
   return (
@@ -627,25 +622,9 @@ const removeUsersSavedTracks: tool<{
     }
 
     try {
-      // Ensure token is fresh (handles auto-refresh if needed)
-      await createSpotifyApi();
-      const config = loadSpotifyConfig();
-
-      const uris = trackIds.map((id) => `spotify:track:${id}`).join(',');
-      const response = await fetch(
-        `https://api.spotify.com/v1/me/library?uris=${encodeURIComponent(uris)}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${config.accessToken}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(`Spotify API error ${response.status}: ${errorData}`);
-      }
+      await handleSpotifyRequest(async (spotifyApi) => {
+        await spotifyApi.currentUser.tracks.removeSavedTracks(trackIds);
+      });
 
       return {
         content: [
