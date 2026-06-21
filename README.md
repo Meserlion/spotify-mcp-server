@@ -246,6 +246,36 @@ A lightweight [Model Context Protocol (MCP)](https://modelcontextprotocol.io) se
    - **Returns**: Status of each album (saved or not saved)
    - **Example**: `checkUsersSavedAlbums(["4aawyAB9vmqN3uQ7FjRGTy", "1DFixLWuPkv3KT3TnV35m3"])`
 
+### Artist Operations
+
+1. **getArtist**
+
+   - **Description**: Get detailed information about one or more artists by their Spotify IDs
+   - **Parameters**:
+     - `artistIds` (string|array): A single artist ID or array of artist IDs (max 50)
+   - **Returns**: Artist details including name, genres, followers, popularity, and ID. For a single artist returns a detailed view, for multiple artists returns a summary list.
+   - **Example**: `getArtist("0TnOYISbd1XYRBk9myaseg")` or `getArtist(["0TnOYISbd1XYRBk9myaseg", "06HL4z0CvFAxyc27GXpf02"])`
+
+2. **getArtistAlbums**
+
+   - **Description**: Get an artist's albums with pagination support
+   - **Parameters**:
+     - `artistId` (string): The Spotify ID of the artist
+     - `includeGroups` (array, optional): Filter by album types ("album", "single", "appears_on", "compilation")
+     - `limit` (number, optional): Maximum number of albums to return (1-50)
+     - `offset` (number, optional): Offset for pagination (0-based index)
+   - **Returns**: List of the artist's albums with name, artists, release date, type, track count, and IDs. Shows pagination info.
+   - **Example**: `getArtistAlbums("0TnOYISbd1XYRBk9myaseg", ["album", "single"], 10, 0)`
+
+3. **getArtistTopTracks**
+
+   - **Description**: Get an artist's top tracks in a given market
+   - **Parameters**:
+     - `artistId` (string): The Spotify ID of the artist
+     - `market` (string, optional): An ISO 3166-1 alpha-2 country code (e.g. "US"). Defaults to "US"
+   - **Returns**: List of the artist's top tracks with names, artists, duration, and IDs
+   - **Example**: `getArtistTopTracks("0TnOYISbd1XYRBk9myaseg", "US")`
+
 ### Playlist Operations
 
 1. **getPlaylist**
